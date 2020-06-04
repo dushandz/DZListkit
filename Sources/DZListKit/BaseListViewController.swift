@@ -5,7 +5,10 @@ open class BaseListViewController: UIViewController,UITableViewDelegate, UITable
     
     open var tableView: UITableView
     open var listViewModel: BaseListViewModel
+    /// `Default is true`. when `isAutoRegister` is true. ViewContoller will call `registerCellReuser()` in `ViewDidLoad`
     open var isAutoRegister = true
+    /// `Default is true`. when `autoLoad` is true. ViewContoller will call `listViewModel's load()` in `ViewDidLoad`
+    open var autoLoad = true
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         tableView = UITableView()
@@ -33,14 +36,17 @@ open class BaseListViewController: UIViewController,UITableViewDelegate, UITable
         if self.isAutoRegister {
             self.registerCellReuser()
         }
-        self.tableView.reloadData()
-    }
-    
-   open func registerCellReuser() {
-        for item in self.listViewModel.reuserCellMap {
-            self.tableView.register(item.value, forCellReuseIdentifier: item.key)
+        
+        if self.autoLoad {
+            self.listViewModel.load()
         }
     }
+    
+    open func registerCellReuser() {
+         for item in self.listViewModel.reuserCellMap {
+             self.tableView.register(item.value, forCellReuseIdentifier: item.key)
+         }
+     }
     
     open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.listViewModel.listData.count
@@ -56,17 +62,21 @@ open class BaseListViewController: UIViewController,UITableViewDelegate, UITable
     
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          if indexPath.row < self.listViewModel.listData.count {
-             let cellModel = self.listViewModel.listData[indexPath.row]
-             let reuser = self.listViewModel.findCellReuser(cellModel)
-             let cell = tableView.dequeueReusableCell(withIdentifier: reuser, for: indexPath)
-             if cell is BaseListViewCell {
-                 let baseCell = cell as! BaseListViewCell
-                 baseCell.configWithModel(cellModel)
-             }
-             return cell
-         } else {
-             return  UITableViewCell()
-         }
+                // find the dataModel.
+                let cellModel = self.listViewModel.listData[indexPath.row]
+                // get cell reuseIdentifier.
+                let reuser = self.listViewModel.findCellReuser(cellModel)
+                let cell = tableView.dequeueReusableCell(withIdentifier: reuser, for: indexPath)
+                if cell is BaseListViewCell {
+                    let baseCell = cell as! BaseListViewCell
+                    //update cell with model.
+                    baseCell.configWithModel(cellModel)
+                }
+                return cell
+            } else {
+                //out of range.
+                return  UITableViewCell()
+            }
      }
     
 }

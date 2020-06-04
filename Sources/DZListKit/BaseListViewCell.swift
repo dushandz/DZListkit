@@ -17,6 +17,8 @@ open class BaseListViewCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: nil)
     }
     
+    /// update UI with `cellModel`.
+    /// - Parameter cellModel: cell update use it.
     open func configWithModel(_ cellModel: BaseListModel) {
         
     }
