@@ -1,6 +1,3 @@
 # DZListKit
 
-good architecture list kit.(using UIKit)
-
-
-
+Simple MVVM ListKit For iOS.

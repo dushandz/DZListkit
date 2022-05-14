@@ -1,19 +1,26 @@
 //
-//  File.swift
-//  
+//  DZBaseListCell.swift
+//  DZListKit
 //
-//  Created by dushandz on 2021/4/13.
+//  Created by dushandz on 2022/5/5.
 //
 
 import Foundation
 import UIKit
 
-@objc
-protocol DZBaseListCell where Self: UITableViewCell {
-    func config(_ model: DZBaseListModel)
-    func cellHeight(_ model: DZBaseListModel) -> CGFloat
-}
+///List 组件 TableViewCell 基类
+open class DZBaseTableViewCell: UITableViewCell, DZListBaseCellType {
+    
+    open func update(_ model: DZListBsaeModelType) { }
 
-extension DZBaseListCell {
-    func cellHeight(_ model: DZBaseListModel) -> CGFloat { model.cellHeight }
+    open class func getCellHeight(_ model: DZListBsaeModelType) -> CGFloat { 0 }
+    open class func getCellSize(_ model: DZListBsaeModelType) -> CGSize { CGSize.zero }
+}
+///List 组件 UICollectionViewCell 基类
+open class DZBaseCollectionViewCell: UICollectionViewCell, DZListBaseCellType {
+    
+    open func update(_ model: DZListBsaeModelType) { }
+
+    open class func getCellHeight(_ model: DZListBsaeModelType) -> CGFloat { 0 }
+    open class func getCellSize(_ model: DZListBsaeModelType) -> CGSize { CGSize.zero }
 }
